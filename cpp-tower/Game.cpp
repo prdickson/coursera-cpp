@@ -9,7 +9,6 @@
 #include "Stack.h"
 #include "uiuc/Cube.h"
 #include "uiuc/HSLAPixel.h"
-
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -17,10 +16,58 @@ using std::endl;
 // Solves the Tower of Hanoi puzzle.
 // (Feel free to call "helper functions" to help you solve the puzzle.)
 void Game::solve() {
-  // Prints out the state of the game:
-  cout << *this << endl;
+  bool moveRight = true;
+  while (stacks_[2].size() != 4) {
+    if (moveRight == true) {
+        _smallestRight();
+    } else {
+        _nextLegal();
+    }
 
-  // @TODO -- Finish solving the game!
+    moveRight = !moveRight;
+
+    cout << *this << endl;
+  }
+}
+
+void Game::_smallestRight() {
+  for (int i = 0; i < 3; i++) {
+      if (stacks_[i].size() > 0) {
+          if (stacks_[i].peekTop().getLength() == 1) {
+              int next = i == 2 ? 0 : i + 1;
+              stacks_[next].push_back(stacks_[i].removeTop());
+              return;
+          }
+      }
+  }
+}
+
+void Game::_nextLegal() {
+  int smallest = 0;
+  for (int i = 0; i < 3; i++) {
+      if (stacks_[i].size() > 0) {
+          if (stacks_[i].peekTop().getLength() == 1) {
+              smallest = i;
+          }
+      }
+  }
+  
+  Stack & stackA = stacks_[(smallest + 1) % 3];
+  Stack & stackB = stacks_[(smallest + 2) % 3];
+  bool moveRight = true;
+  if  (stackA.size() > 0 && stackB.size() > 0) {
+     moveRight = stackB.peekTop().getLength() > stackA.peekTop().getLength();
+  } else if (stackA.size() > 0) {
+      moveRight = true;
+  } else {
+      moveRight = false;
+  }
+
+  if (moveRight == true) {
+      stackB.push_back(stackA.removeTop());
+  } else {
+      stackA.push_back(stackB.removeTop());
+  }
 }
 
 // Default constructor to create the initial state:

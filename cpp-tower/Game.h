@@ -20,4 +20,6 @@ class Game {
 
   private:
     std::vector<Stack> stacks_;
+    void _smallestRight();
+    void _nextLegal();
 };
