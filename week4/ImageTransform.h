@@ -1,6 +1,8 @@
 #pragma once
 
+#include <cmath>
 #include "uiuc/PNG.h"
+
 using namespace uiuc;
 
 PNG grayscale(PNG image);  
